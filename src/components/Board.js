@@ -123,7 +123,8 @@ class Board extends React.Component {
         const board = await res.json()
 
         // Add each Part of current Board in database
-        this.state.parts.map( async ({name, acronym}, index) => {
+        // await all fetch before redirect to next step
+        await Promise.all(this.state.parts.map( async ({name, acronym}, index) => {
             const res = await fetch('http://localhost:5000/api/part', {
                 method : 'POST',
                 headers : {
@@ -137,12 +138,16 @@ class Board extends React.Component {
                 })
             })
 
+            console.log(res)
+
             if(!res.ok){
                 return this.setState({
                     err: true
                 })
-            }      
-        })
+            }
+            
+            return res
+        }))
         return this.props.history.push('/dashboard/'+board.id)
         
     }
