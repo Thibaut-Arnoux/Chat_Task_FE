@@ -146,7 +146,7 @@ class Board extends React.Component {
             
             return res
         }))
-        return this.props.history.push('/dashboard/'+board.id)
+        return this.props.history.push('/board/'+board.id)
         
     }
 
