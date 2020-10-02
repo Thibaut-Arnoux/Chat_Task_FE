@@ -138,8 +138,6 @@ class Board extends React.Component {
                 })
             })
 
-            console.log(res)
-
             if(!res.ok){
                 return this.setState({
                     err: true

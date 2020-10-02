@@ -10,10 +10,10 @@ function Part({part}){
                 </thead>
                 <tbody>                                    
                     {
-                        part.msgs.map((msg) => {
+                        part.msgs.map((msg, index) => {
                             return(
-                                <tr key={msg.id}>
-                                    <td>{msg.content} </td>
+                                <tr key={index}>
+                                    <td>{msg} </td>
                                 </tr>
                             ) 
                         })
