@@ -1,4 +1,5 @@
 import React from 'react'
+import { Button, Form, Container, Alert } from 'react-bootstrap'
 
 class Auth extends React.Component {
 
@@ -7,7 +8,8 @@ class Auth extends React.Component {
 
         this.state = {
             username: '',
-            err: false
+            err: false,
+            success: false
         }
     }
     
@@ -23,9 +25,8 @@ class Auth extends React.Component {
     handleSumbit = async (e) => {
         e.preventDefault()
 
-
         // Try to get tokens
-        const res = await fetch('http://localhost:5000/api/auth/login', {
+        const res = await fetch('http://localhost:5000/api/auth/signup', {
             method : 'POST',
             headers : {
               'Content-Type' : 'application/json',
@@ -34,50 +35,44 @@ class Auth extends React.Component {
         })
 
         if(!res.ok){
+            console.log(res)
             return this.setState({
+                username: '',
                 err: true
             })
         } 
 
-        const data = await res.json()
-        try {
-            // Add username
-            localStorage.setItem(
-                'current_user',
-                this.state.username
-            );
-
-            // Add access_token
-            localStorage.setItem(
-                'access_token',
-                data.access_token
-            );
-        } catch (error) {
-            this.setState({
-                err: true
-            })
-        }        
-
-        // Redirect to board
-        this.props.history.push('/board')
+        // const data = await res.json()
+        return this.setState({
+            username: '',
+            success: true
+        })
     }
     
     render() {
 
-        let error_banner;
-        if(this.state.err){
-            error_banner = <div>Error in pseudo.</div>
-        }
-
         return(
-            <div>
-                {error_banner}
-                <form onSubmit={this.handleSumbit}>
-                    <label>Pseudo</label>
-                    <input type="text" value={this.state.username} onChange={this.handlePseudo} />
-                    <button>Valider</button>
-                </form>                
-            </div>
+            <Container>
+                <h1>Création Utilisateur</h1>
+                { this.state.err && (
+                <Alert variant='danger'>
+                    Utilisateur déjà existant !
+                </Alert>)}
+
+                { this.state.success && (
+                <Alert variant='success'>
+                    Utilisateur crée !
+                </Alert>)}
+
+
+                <Form onSubmit={this.handleSumbit}>
+                    <Form.Group controlId="formPseudo">
+                        <Form.Label>Pseudo</Form.Label>
+                        <Form.Control required type="text" value={this.state.username} onChange={this.handlePseudo} placeholder='Pseudo'/>
+                    </Form.Group>
+                    <Button variant="primary" type="submit">Valider</Button>
+                </Form>                
+            </Container>
         )    
     }
 }
