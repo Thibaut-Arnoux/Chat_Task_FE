@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Form, Container, Alert } from 'react-bootstrap'
+import { Button, Form, Container, Alert, Row, Col } from 'react-bootstrap'
 
 class Auth extends React.Component {
 
@@ -52,26 +52,31 @@ class Auth extends React.Component {
     render() {
 
         return(
-            <Container>
-                <h1>Création Utilisateur</h1>
-                { this.state.err && (
-                <Alert variant='danger'>
-                    Utilisateur déjà existant !
-                </Alert>)}
+            <Container fluid>
+                <Row>
+                    <Col sm='8'></Col>
+                    <Col sm='4'>
+                        <h1>Création Utilisateur</h1>
+                        { this.state.err && (
+                        <Alert variant='danger'>
+                            Utilisateur déjà existant !
+                        </Alert>)}
 
-                { this.state.success && (
-                <Alert variant='success'>
-                    Utilisateur crée !
-                </Alert>)}
+                        { this.state.success && (
+                        <Alert variant='success'>
+                            Utilisateur crée !
+                        </Alert>)}
 
 
-                <Form onSubmit={this.handleSumbit}>
-                    <Form.Group controlId="formPseudo">
-                        <Form.Label>Pseudo</Form.Label>
-                        <Form.Control required type="text" value={this.state.username} onChange={this.handlePseudo} placeholder='Pseudo'/>
-                    </Form.Group>
-                    <Button variant="primary" type="submit">Valider</Button>
-                </Form>                
+                        <Form onSubmit={this.handleSumbit}>
+                            <Form.Group controlId="formPseudo">
+                                <Form.Label>Pseudo</Form.Label>
+                                <Form.Control required type="text" value={this.state.username} onChange={this.handlePseudo} placeholder='Pseudo'/>
+                            </Form.Group>
+                            <Button variant="primary" type="submit">Valider</Button>
+                        </Form>
+                    </Col>
+                </Row>            
             </Container>
         )    
     }

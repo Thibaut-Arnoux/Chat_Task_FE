@@ -83,7 +83,7 @@ class NavBar extends React.Component{
         const isAuthenticated = localStorage.getItem('access_token')
 
         return isAuthenticated ? (
-            <Container>
+            <Container fluid className='pl-0 pr-0'>
                 <Navbar bg="light" variant="light" className="mb-1 justify-content-between">
                     <Navbar.Brand as={Link} to="/">Accueil</Navbar.Brand>
                     <Nav className="mr-auto">
@@ -95,7 +95,7 @@ class NavBar extends React.Component{
                 </Navbar>
             </Container>
         ) : (
-            <Container>
+            <Container fluid className='pl-0 pr-0'>
                 <Navbar bg="light" variant="light" className="mb-1 justify-content-between">
                     <Navbar.Brand as={Link} to="/">Accueil</Navbar.Brand>
     

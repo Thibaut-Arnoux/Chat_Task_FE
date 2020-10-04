@@ -170,7 +170,7 @@ class Board extends React.Component {
 
     render() {
         return (
-            <Container>
+            <Container fluid>
                 <Row>
                     <Col sm='6'>
                     <h1>Création d'un Tableau</h1>

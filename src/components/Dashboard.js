@@ -72,7 +72,7 @@ class Dashboard extends React.Component {
     render() {
         
         return this.state.board ? (
-            <Container >                
+            <Container fluid>                
                 <Row>
                     <Col>
                         <h1> Tableau : {this.state.board.name }</h1>
@@ -82,7 +82,7 @@ class Dashboard extends React.Component {
                 </Row>
                 
                 <Row>
-                    <Col sm='8'>
+                    <Col sm='10'>
                         <Row>
                         {
                             this.state.parts.map((part) => {
@@ -95,7 +95,7 @@ class Dashboard extends React.Component {
                         }
                         </Row>
                     </Col>
-                    <Col sm='4'>
+                    <Col sm='2'>
                         <Chat boardId={this.state.board.id} getMessage={this.getMessage}/>
                     </Col>
                 </Row>
