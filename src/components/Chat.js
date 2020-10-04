@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Form, Button } from 'react-bootstrap'
 import socketIOClient from "socket.io-client";
 const ENDPOINT = "http://127.0.0.1:5000";
 
@@ -16,6 +17,7 @@ class Chat extends Component {
     }
 
     handleSend = (event) => {
+        event.preventDefault()
         this.state.socket.emit('my_event', 
         {'content' : this.state.msgSend,
          'access_token' : localStorage.getItem('access_token'),
@@ -36,6 +38,7 @@ class Chat extends Component {
     addResponse = (response) => {
         const messages = this.state.messages
         const msg = JSON.parse(response)
+        const user = msg['user']
         const content = msg['content']
         const acronym = msg['tag']
         // const date = new Date(msg['date'])
@@ -43,7 +46,7 @@ class Chat extends Component {
         // const minute = date.getMinutes()
         // const second = date.getSeconds()
 
-        messages.push(content)
+        messages.push({user: user, content: content})
 
         this.setState({
             messages: messages
@@ -71,24 +74,24 @@ class Chat extends Component {
         });
     }
 
-
     render() {
 
-        const connexion = this.state.loadClient && (<h3>Welcome to the Chat</h3>)
-
         return this.state.loadClient ? (
-            <div>
-                { connexion }
-
-                {
-                    this.state.messages.map((msg, index) => {
-                        return(
-                            <p key={index}>{localStorage.getItem('current_user')} : {msg}</p>
-                        )
-                    })
-                }
-                <input type="text" value={this.state.msgSend} onChange={this.handleMsgSend}/>
-                <button onClick={this.handleSend}>Send</button>
+            <div className="sticky-top">
+                <h3>Chat</h3>
+                <div className="overflow-auto mb-1" style={{height: "650px", border: "solid 1px"}}>
+                    {
+                        this.state.messages.map((msg, index) => {
+                            return(
+                                <p key={index}>{msg.user} : {msg.content}</p>
+                            )
+                        })
+                    }
+                </div>
+                <Form onSubmit={this.handleSend}>
+                    <Form.Control type="text" value={this.state.msgSend} onChange={this.handleMsgSend} placeholder='Envoyer un message'/>
+                    <Button className="mt-1 float-right" variant="primary" type="submit">Envoyer</Button>
+                </Form>
             </div>
         ) :
         <div>Loading...</div> 
