@@ -1,4 +1,5 @@
 import React from 'react'
+import { Button, Form, Container, Alert, Col, Row } from 'react-bootstrap'
 
 class Board extends React.Component {
 
@@ -9,8 +10,17 @@ class Board extends React.Component {
             board_name: '',
             nb_part: '',
             parts: [],
-            errors : {}
+            errors : {},
+            loadBoard: ''
         }
+    }
+
+    handleBoardId = (e) => {
+        const loadBoard = e.target.value
+
+        this.setState({
+            loadBoard: loadBoard
+        })
     }
 
     handleBoardName = (e) => {
@@ -20,7 +30,7 @@ class Board extends React.Component {
         if(board_name){
             errors["board"] = ''
         } else {
-            errors["board"] = "This field cannot be empty."
+            errors["board"] = "Ce champ ne peut être vide."
         }
 
         this.setState({
@@ -35,7 +45,7 @@ class Board extends React.Component {
         let parts = []
 
         if(nb_part < 0 || nb_part > 10){            
-            errors["nb_part"] = "Invalid number of parts."
+            errors["nb_part"] = "Nombre incorrect."
         } else {            
             errors["nb_part"] = ''
 
@@ -65,7 +75,7 @@ class Board extends React.Component {
         if(name){
             errors["part_name"] = ''
         } else {
-            errors["part_name"] = "Part cannot be empty."
+            errors["part_name"] = "Ce champ ne peut être vide."
         }
 
         parts[index]["name"] = name
@@ -84,7 +94,7 @@ class Board extends React.Component {
         if(acronym){
             errors["acronym"] = ''
         } else {
-            errors["acronym"] = "Acronym cannot be empty."
+            errors["acronym"] = "Ce champ ne peut être vide."
         }
 
         parts[index]["acronym"] = acronym
@@ -95,6 +105,13 @@ class Board extends React.Component {
             parts: parts
         })
     }
+
+    handleLoadSumbit = (e) => {
+        e.preventDefault()
+
+        return this.props.history.push('/board/'+this.state.loadBoard)
+    }
+
 
     handleSumbit = async (e) => {
         e.preventDefault()
@@ -152,65 +169,74 @@ class Board extends React.Component {
 
 
     render() {
-        const errorDashboard = this.props.location.state && <span>Error unknow Board Identifier</span>
-        const errors = this.state.errors
-        let errorNbPart, errorBoard;
-        if(errors["nb_part"]){
-            errorNbPart = (
-            <div>
-                <span style={{color: "red"}}>{this.state.errors["nb_part"]}</span>
-                <br/>
-            </div>)
-        }
-
-        if(errors["board"]){
-            errorBoard = (
-                <div>
-                    <span style={{color: "red"}}>{this.state.errors["board"]}</span>
-                    <br/>
-                </div>)
-        }
-
-
         return (
-            <div>
-            { errorDashboard }            
+            <Container>
+                <Row>
+                    <Col sm='6'>
+                    <h1>Création d'un Tableau</h1>
+                    <Form onSubmit={this.handleSumbit}>
+                        <Form.Group controlId="formBoard">
+                            {/* Alert when error is trigger */}
+                            { this.state.errors["board"] && (
+                            <Alert variant='warning'>
+                                {this.state.errors["board"]}
+                            </Alert>)}
+                            <Form.Label>Nom du tableau</Form.Label>
+                            <Form.Control type="text" required="required" value={this.state.board_name} onChange={this.handleBoardName} />
+                        </Form.Group>
+                        <Form.Group controlId="formNbPart">
+                            {/* Alert when error is trigger */}
+                            { this.state.errors["nb_part"] && (
+                            <Alert variant='warning'>
+                                {this.state.errors["nb_part"]}
+                            </Alert>)}
+                            <Form.Label>Nombre de colonne(s) (max 10)</Form.Label>
+                            <Form.Control type="number" required="required" max="10" value={this.state.nb_part} onChange={this.handleNbPart} />
+                            </Form.Group>
 
-            <form onSubmit={this.handleSumbit}>
-                <div>
-                    { errorBoard }
-                    <label>Board</label>
-                    <input type="text" required="required" value={this.state.board_name} onChange={this.handleBoardName} />
-                </div>
-                <div>
-                    { errorNbPart }
-                    <label>Number Part (max 10)</label>
-                    <input type="number" required="required" max="10" value={this.state.nb_part} onChange={this.handleNbPart} />
-                </div>
+                        {
+                            this.state.parts.map(({name, acronym, errors}, index) => {
+                                return(
+                                    <Form.Group controlId={"formPart"+index} key={index}>
+                                        { errors["part_name"] && (
+                                        <Alert variant='warning' className="mb-0">
+                                            {errors["part_name"]}
+                                        </Alert>)}
+                                        <Form.Label>Colonne {index + 1}</Form.Label>
+                                        <Form.Control type="text" required="required" value={name} onChange={(e) => this.handlePartName(index, e)}/>
 
-                {
-                    this.state.parts.map(({name, acronym, errors}, index) => {
-                        return(
-                            <div key={index}>
-                                <div>
-                                    <span style={{color: "red"}}>{errors["part_name"]}</span><br/>
-                                    <label>Part {index + 1} </label>
-                                    <input type="text" required="required" value={name} onChange={(e) => this.handlePartName(index, e)}/>
-                                </div>
+                                        { errors["acronym"] && (
+                                        <Alert variant='warning' className="mt-2 mb-0">
+                                            {errors["acronym"]}
+                                        </Alert>)}
+                                        <Form.Label>Acronyme</Form.Label>
+                                        <Form.Control type="text" required="required" value={acronym} onChange={(e) => this.handlePartAcronym(index, e)}/>
+                                    </Form.Group>
+                                )
+                            })
+                        }     
+                        
+                        <Button variant="primary" type="submit">Valider</Button>
+                    </Form> 
+                    </Col>
 
-                                <div>
-                                    <span style={{color: "red"}}>{errors["acronym"]}</span><br/>
-                                    <label>Acronym </label>
-                                    <input type="text" required="required" value={acronym} onChange={(e) => this.handlePartAcronym(index, e)}/>
-                                </div>
-                            </div>
-                        )
-                    })
-                }           
-                
-                <button>Valider</button>
-            </form> 
-            </div> 
+                    <Col>
+                    <h1>Chargement d'un Tableau</h1>
+                    { this.props.location.state && (
+                        <Alert variant='warning'>
+                            Identifiant de tableau inconnu.
+                        </Alert>
+                    )}    
+                    <Form onSubmit={this.handleLoadSumbit}>
+                        <Form.Group controlId="formLoadBoard">
+                            <Form.Label>Identifiant</Form.Label>
+                            <Form.Control type="text" required="required" value={this.state.loadBoard} onChange={this.handleBoardId}/>
+                        </Form.Group>
+                        <Button variant="primary" type="submit">Valider</Button>
+                    </Form>
+                    </Col>
+                </Row>
+            </Container> 
         )
     }
     
