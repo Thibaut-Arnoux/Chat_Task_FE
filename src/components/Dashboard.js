@@ -1,6 +1,7 @@
-import React, {Fragment} from 'react'
+import React from 'react'
 import Part from './Part'
 import Chat from './Chat'
+import { Container, Col, Row } from 'react-bootstrap'
 
 class Dashboard extends React.Component {
 
@@ -71,24 +72,36 @@ class Dashboard extends React.Component {
     render() {
         
         return this.state.board ? (
-            <div> 
-                <h1> Board Name : {this.state.board.name }</h1>
-                <h2> Nb Part : {this.state.board.nb_part }</h2>
-                {
-                    this.state.parts.map((part) => {
-                        return (
-                            <Fragment key={part.id}>
-                                <Part part={part}/>
-                            </Fragment>
-                        )
-                    })
-                }
-                <div style={{display: 'inline-block'}}>
-                    <Chat boardId={this.state.board.id} getMessage={this.getMessage}/>
-                </div>
-            </div>
+            <Container >                
+                <Row>
+                    <Col>
+                        <h1> Tableau : {this.state.board.name }</h1>
+
+                        <h2> Identifiant : {this.state.board.id }</h2>
+                    </Col>
+                </Row>
+                
+                <Row>
+                    <Col sm='8'>
+                        <Row>
+                        {
+                            this.state.parts.map((part) => {
+                                return (
+                                    <Col key={part.id} sm={12 / this.state.board.nb_part}>
+                                        <Part part={part}/>
+                                    </Col>
+                                )
+                            })
+                        }
+                        </Row>
+                    </Col>
+                    <Col sm='4'>
+                        <Chat boardId={this.state.board.id} getMessage={this.getMessage}/>
+                    </Col>
+                </Row>
+            </Container>
         ) : 
-        <div>Loading...</div> 
+        <Container>Loading...</Container> 
     }
 }
 
