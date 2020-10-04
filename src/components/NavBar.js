@@ -85,19 +85,19 @@ class NavBar extends React.Component{
         return isAuthenticated ? (
             <Container>
                 <Navbar bg="light" variant="light" className="mb-1 justify-content-between">
-                    <Navbar.Brand as={Link} to="/">Navbar</Navbar.Brand>
+                    <Navbar.Brand as={Link} to="/">Accueil</Navbar.Brand>
                     <Nav className="mr-auto">
-                        <Nav.Link as={Link} to="/board">Board</Nav.Link>
+                        <Nav.Link as={Link} to="/board">Tableau</Nav.Link>
                     </Nav>
 
                     <Nav className="mr-3">{localStorage.getItem('current_user')}</Nav>
-                    <Button variant="primary" onClick={this.handleLogOut}>Log Out</Button>
+                    <Button variant="primary" onClick={this.handleLogOut}>Déconnexion</Button>
                 </Navbar>
             </Container>
         ) : (
             <Container>
                 <Navbar bg="light" variant="light" className="mb-1 justify-content-between">
-                    <Navbar.Brand as={Link} to="/">Navbar</Navbar.Brand>
+                    <Navbar.Brand as={Link} to="/">Accueil</Navbar.Brand>
     
                     
                     <Form inline onSubmit={this.handleSumbit}>
@@ -106,7 +106,7 @@ class NavBar extends React.Component{
                         value={this.state.username}
                         onChange={this.handlePseudo}
                         placeholder='Pseudo'/>
-                        <Button variant="primary" type="submit">Login</Button>
+                        <Button variant="primary" type="submit">Connexion</Button>
                     </Form> 
                 </Navbar>
             </Container>
