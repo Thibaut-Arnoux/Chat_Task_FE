@@ -63,6 +63,11 @@ class Chat extends Component {
         socket.on('connect', () => {
             loadClient = true
 
+            socket.emit('join', 
+                {'access_token' : localStorage.getItem('access_token'),
+                'board_id' : this.props.boardId
+            });
+
             this.setState({
                 socket: socket,
                 loadClient: loadClient
@@ -72,6 +77,15 @@ class Chat extends Component {
         socket.on('my_event', (response) => {
             this.addResponse(response)             
         });
+    }
+
+    componentWillUnmount(){
+        this.state.socket.emit('leave', 
+        {'access_token' : localStorage.getItem('access_token'),
+         'board_id' : this.props.boardId
+        });
+
+         this.state.socket.disconnect()
     }
 
     render() {
